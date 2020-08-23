@@ -1,0 +1,139 @@
+//ajax call with request body
+
+
+$(document).ready(function() {
+		$("#b").click(function() {
+			var doSave = confirm('Are you sure you want to submit?');
+			if(doSave)
+				{
+		
+
+			/* 	if($("#firstName1").val().trim() ==''){
+					alert("please enter comment");
+				}
+			 */
+			
+			var bomDetails = {
+				firstName1 : $('#firstName1').val().trim(),
+				lastName1 : $('#lastName1').val().trim(),
+				grno : $('#grno').val().trim(),
+				approvedby : $('#approvedby').val().trim(),
+				qualitycheckedby : $('#qualitycheckedby').val().trim(),
+				date1 : $('#date1').val().trim(),
+				inspectioncalldate : $('#inspectioncalldate').val().trim(),
+				date2 : $('#date2').val().trim(),
+				vendorname : $('#vendorname').val().trim(),
+				stageofinspection : $('#stageofinspection').val().trim(),
+				inhouse : $('#inhouse').val().trim(),
+				successmeasure : $('#successmeasure').val().trim(),
+				bomAvlItem : $('#bomAvlItem').val().trim(),
+				bomspareitems : $('#bomspareitems').val().trim(),
+				bomqty : $('#bomqty').val().trim(),
+				bomuom : $('#bomuom').val().trim(),
+				specdrawing : $('#specdrawing').val().trim(),
+				specfound : $('#specfound').val().trim(),
+				speccomments : $('#speccomments').val().trim(),
+				aestheticlooks : $('#aestheticlooks').val().trim(),
+				weldingquality : $('#weldingquality').val().trim(),
+				finishingquality : $('#finishingquality').val().trim(),
+				testcertificate : $('#testcertificate').val().trim(),
+				identificationno : $('#identificationno').val().trim(),
+				functionalitycheck : $('#functionalitycheck').val().trim(),
+				paint : $('#paint').val().trim(),
+				galvanisation : $('#galvanisation').val().trim(),
+				materialquality : $('#materialquality').val().trim(),
+				dptest : $('#dptest').val().trim(),
+				make : $('#make').val().trim(),
+				hardnessofrubber : $('#hardnessofrubber').val().trim(),
+				shortDescription : $('#shortDescription1').val().trim(),
+				bomdetailsid: "",
+				projectid:""
+			}
+
+	f
+			$.ajax({
+				type : "POST",
+				url : "save-qa-inspection-qa",
+				data : JSON.stringify(bomDetails),
+				contentType : "application/json",
+				beforeSend : function(xhr) {
+        			// $.blockUI();
+        			ajaxindicatorstart('Loading... Please Wait');
+        		},
+        		complete : function() {
+        			ajaxindicatorstop();
+        		},
+				success : function(response) {
+					console.log(response);
+					alert("Inspection Details saved successfully")
+
+				},
+				error : function(xhr, status, error) {
+					console.log(error);
+					alert("Error while saving the inspection details")
+				}
+			});
+		}
+		});
+	});
+	
+	
+	
+	
+	//controller
+
+
+@PostMapping("/save-qa-inspection-qa")
+	public @ResponseBody QaInspectionDTO updateProjectSettings(@RequestBody QaInspectionDTO qaInspection)
+			throws ParseException {
+
+		qaInspection = qaService.createQaInspection(qaInspection);
+		return qaInspection;
+	}
+	
+	
+	
+	@Override
+	public QaInspectionDTO createQaInspection(QaInspectionDTO dto) throws ParseException {
+		qaInspectionRepository.save(preparedQAInspection(dto));
+		return dto;
+	}
+	
+	private QaInspection preparedQAInspection(QaInspectionDTO dto) throws ParseException {
+
+		QaInspection inspect = new QaInspection();
+		inspect.setProjectCode(dto.getFirstName1());
+		inspect.setPoNo(dto.getLastName1());
+		inspect.setGrnNo(dto.getGrno());
+		inspect.setApprovedBy(dto.getApprovedby());
+		inspect.setQualicyCheckedBy(dto.getQualitycheckedby());
+		inspect.setDate1(dateFormatConvert(dto.getDate1()));
+		inspect.setInspectionCallDate(dto.getInspectioncalldate());
+		inspect.setDate2(dateFormatConvert(dto.getDate2()));
+		inspect.setVendorName(dto.getVendorname());
+		inspect.setStageInspection(dto.getStageofinspection());
+		inspect.setHouseOutsource(dto.getInhouse());
+		inspect.setQualityRate(dto.getSuccessmeasure());
+		inspect.setPartNo(dto.getBomAvlItem());
+		inspect.setItemDrawing(dto.getSpecdrawing());
+		inspect.setQuantity(dto.getBomqty());
+		inspect.setUom(dto.getBomuom());
+		inspect.setSpecDrawing(dto.getSpecdrawing());
+		inspect.setSpecFound(dto.getSpecfound());
+		inspect.setComments(dto.getSpeccomments());
+		inspect.setAestheticLooks(dto.getAestheticlooks());
+		inspect.setWeldingQuality(dto.getWeldingquality());
+		inspect.setFinishingQuality(dto.getFinishingquality());
+		inspect.setTestCertificate(dto.getTestcertificate());
+		inspect.setIdentificationNo(dto.getIdentificationno());
+		inspect.setFunctionalityCheck(dto.getFunctionalitycheck());
+		inspect.setPaint(dto.getPaint());
+		inspect.setGalvanisation(dto.getGalvanisation());
+		inspect.setMaterialQuality(dto.getMaterialquality());
+		inspect.setDpTest(dto.getDptest());
+		inspect.setMake(dto.getMake());
+		inspect.setHardnessRubber(dto.getHardnessofrubber());
+		inspect.setNote(dto.getShortDescription());
+
+		return inspect;
+	}
